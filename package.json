@@ -1,5 +1,5 @@
 {
-  "name": "blockchain_comparation",
+  "name": "blockchain_comparison",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,11 @@
   "dependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.1"
+    "next": "14.2.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.15",
+    "@mui/x-charts": "^7.2.0"
   },
   "devDependencies": {
     "typescript": "^5",
