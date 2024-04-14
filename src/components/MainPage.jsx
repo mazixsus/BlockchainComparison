@@ -1,8 +1,9 @@
-'use client'
+"use client";
 import React, { useEffect } from "react";
 import { Chart } from "./Chart";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export const MainPage = () => {
   const [blockchainData, setBlockchainData] = React.useState([]);
@@ -11,10 +12,10 @@ export const MainPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
 
-      const raw = JSON.stringify({
+      const body = JSON.stringify({
         chainName: "near",
         period: "last year",
         metric: "tg_growth_index",
@@ -23,17 +24,17 @@ export const MainPage = () => {
 
       const requestOptions = {
         method: "POST",
-        headers: myHeaders,
-        body: raw,
+        headers: headers,
+        body: body,
         redirect: "follow",
       };
 
-      await fetch("http://localhost:5000/grow-index/", requestOptions)
+      await fetch("/api/basic-timeline-data", requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.blockchain);
-          setBlockchainData(data.blockchain);
-          setCumulativeData(data.cumulative);
+          console.log(data.tokenGuardData.blockchain);
+          setBlockchainData(data.tokenGuardData.blockchain);
+          setCumulativeData(data.tokenGuardData.cumulative);
           setLoading(false);
         })
         // .then((result) => console.log(result))
@@ -44,9 +45,29 @@ export const MainPage = () => {
   }, []);
 
   return (
-    <Box sx={{px: 10}}>
-      <Typography variant="h3" fontFamily={"Roboto"}>Blockchain Grow Index</Typography>
-      {loading ? <p>Loading...</p> : <Chart blockChainData={blockchainData} cumulativeData={cumulativeData} />}
+    <Box sx={{ px: 10 }}>
+      <Typography variant="h3" fontFamily={"Roboto"}>
+        Blockchain Grow Index
+      </Typography>
+      {loading ? (
+        <Backdrop
+          sx={{
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 1)",
+            opacity: 1,
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={loading ? true : false}
+          // open={true}
+        >
+          <CircularProgress color="primary" />
+        </Backdrop>
+      ) : (
+        <Chart blockChainData={blockchainData} cumulativeData={cumulativeData} />
+      )}
     </Box>
   );
 };
