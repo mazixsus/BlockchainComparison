@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Chart } from "./Chart";
 import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { Backdrop, CircularProgress } from "@mui/material";
 
 export const MainPage = () => {
@@ -10,16 +10,19 @@ export const MainPage = () => {
   const [cumulativeData, setCumulativeData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
+  const [blockchain, setBlockchain] = React.useState("near");
+  const [cumulativeBC, setCumulativeBC] = React.useState(["fantom"]);
+
   useEffect(() => {
     const fetchData = async () => {
       const headers = new Headers();
       headers.append("Content-Type", "application/json");
 
       const body = JSON.stringify({
-        chainName: "near",
+        chainName: blockchain, //"near",
         period: "last year",
         metric: "tg_growth_index",
-        compareWith: ["fantom"],
+        compareWith: cumulativeBC, //["fantom"],
       });
 
       const requestOptions = {
@@ -42,32 +45,41 @@ export const MainPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [blockchain, cumulativeBC]);
 
   return (
-    <Box sx={{ px: 10 }}>
-      <Typography variant="h3" fontFamily={"Roboto"}>
-        Blockchain Grow Index
-      </Typography>
-      {loading ? (
-        <Backdrop
-          sx={{
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 1)",
-            opacity: 1,
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
-          open={loading ? true : false}
-          // open={true}
-        >
-          <CircularProgress color="primary" />
-        </Backdrop>
-      ) : (
-        <Chart blockChainData={blockchainData} cumulativeData={cumulativeData} />
-      )}
-    </Box>
+    <div class="flex h-screen p-4">
+      <Box className="bg-white/30 backdrop-blur-lg w-full h-full px-10 py-5 rounded-lg">
+        <h1 class="mb-3 text-5xl ">Blockchain Grow Index</h1>
+        <Divider className="mb-6"/>
+        {loading ? (
+          <Backdrop
+            sx={{
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 1)",
+              borderRadius: 3,
+              opacity: 1,
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={loading ? true : false}
+            // open={true}
+          >
+            <CircularProgress color="primary" />
+          </Backdrop>
+        ) : (
+          <Chart
+            blockChainData={blockchainData}
+            cumulativeData={cumulativeData}
+            blockchain={blockchain}
+            cumulativeBC={cumulativeBC}
+            setBlockchain={setBlockchain}
+            setCumulativeBC={setCumulativeBC}
+          />
+        )}
+      </Box>
+    </div>
   );
 };

@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { Box } from "@mui/system";
-import { Slider } from "@mui/material";
+import { Card, Slider } from "@mui/material";
 import { Select, MenuItem, Typography } from "@mui/material";
 import { Chip } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
+import { InputLabel } from "@mui/material";
+import { FormControl } from "@mui/material";
+import { Paper } from "@mui/material";
 
 const blockchains = [
   { key: "near", name: "NEAR Protocol" },
@@ -19,16 +22,13 @@ const blockchains = [
   // {key: "alephzero", name: "Aleph Zero"},
 ];
 
-export const Chart = ({ blockChainData, cumulativeData }) => {
+export const Chart = ({ blockChainData, cumulativeData, blockchain, cumulativeBC, setBlockchain, setCumulativeBC }) => {
   const dates = blockChainData.tg_growth_index.map((item) => item.date);
   const values = blockChainData.tg_growth_index.map((item) => item.value);
   const cumulative = cumulativeData.tg_growth_index.map((item) => item.value);
 
   const [value, setValue] = React.useState([0, dates.length - 1]);
   const minDistance = 10;
-
-  const [blockchain, setBlockchain] = React.useState();
-  const [cumulativeBC, setCumulativeBC] = React.useState([]);
 
   const handleChange = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -52,63 +52,77 @@ export const Chart = ({ blockChainData, cumulativeData }) => {
     <Box>
       <Box display={"flex"} alignItems={"center"} my={1}>
         <Typography mr={1}>Blockchain:</Typography>
-        <Select
-          type="text"
-          size="small"
-          sx={{ mr: 1 }}
-          value={blockchain}
-          onChange={(e) => setBlockchain(e.target.value)}
-        >
-          {blockchains.map((blockchain) => {
-            return (
-              <MenuItem key={blockchain.key} value={blockchain.key}>
-                {blockchain.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-        <Typography mr={1}>Compare with:</Typography>
-        <Select
-          size="small"
-          label="Compare with"
-          value={cumulativeBC}
-          onChange={(e) => setCumulativeBC(e.target.value)}
-          multiple
-          input={<OutlinedInput />}
-          MenuProps={{
-            anchorOrigin: {
-              vertical: "bottom",
-              horizontal: "left"
-            },
-            transformOrigin: {
-              vertical: "top",
-              horizontal: "left"
-            },
-            // getContentAnchorEl: null
-          }}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} size="small" label={blockchains.find((blockchain) => blockchain.key == value).name} />
-              ))}
-            </Box>
-          )}
-        >
-          {blockchains.map((blockchain) => {
-            return (
-              <MenuItem key={blockchain.key} value={blockchain.key}>
-                {blockchain.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="blockchain-lebel" size="small">
+            Select Blockchain
+          </InputLabel>
+          <Select
+            type="text"
+            size="small"
+            labelId="blockchain-lebel"
+            sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
+            value={blockchain}
+            input={<OutlinedInput label="Add To Comapare" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
+            onChange={(e) => setBlockchain(e.target.value)}
+          >
+            {blockchains.map((blockchain) => {
+              return (
+                <MenuItem key={blockchain.key} value={blockchain.key}>
+                  {blockchain.name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <Typography mr={1}>Compare With:</Typography>
+        <FormControl sx={{ minWidth: 300 }}>
+          <InputLabel id="compare-with-lebel" size="small">
+            Add to comapare
+          </InputLabel>
+          <Select
+            labelId="compare-with-lebel"
+            size="small"
+            value={cumulativeBC}
+            onChange={(e) => setCumulativeBC(e.target.value)}
+            multiple
+            sx={{ background: "rgba(255, 255, 255, 0.3)" }}
+            input={<OutlinedInput label="Add To Comapare" />}
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              // getContentAnchorEl: null
+            }}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} size="small" label={blockchains.find((blockchain) => blockchain.key == value).name} />
+                ))}
+              </Box>
+            )}
+          >
+            {blockchains.map((blockchain) => {
+              return (
+                <MenuItem key={blockchain.key} value={blockchain.key}>
+                  {blockchain.name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
       </Box>
-      <Box sx={{ border: 1, borderRadius: 2, p: 5 }}>
+
+      <Card sx={{ border: 1, borderRadius: 2, p: 5, borderColor: "grey", background: "rgba(255, 255, 255, 0.3)" }}>
         <LineChart
           xAxis={[
             {
               scaleType: "point",
-              data: dates.slice(value[0], value[1]),
+              data: dates.slice(value[0], value[1] + 1),
               // tickLabelStyle: {
               //   angle: 45,
               //   textAnchor: "start",
@@ -118,11 +132,11 @@ export const Chart = ({ blockChainData, cumulativeData }) => {
           ]}
           series={[
             {
-              data: values.slice(value[0], value[1]),
+              data: values.slice(value[0], value[1] + 1),
               label: "Growth Index",
             },
             {
-              data: cumulative.slice(value[0], value[1]),
+              data: cumulative.slice(value[0], value[1] + 1),
               label: "Cumulative Growth Index",
             },
           ]}
@@ -134,17 +148,26 @@ export const Chart = ({ blockChainData, cumulativeData }) => {
           <Slider
             value={value}
             onChange={handleChange}
-            // valueLabelDisplay="auto"
             min={0}
             max={dates.length - 1}
+            marks={dates.map((date, index) => {
+              return { value: index, label: date };
+            })}
             getAriaValueText={(value) => dates[value]}
             valueLabelFormat={(value) => dates[value]}
-            valueLabelDisplay="auto"
-            sx={{ mt: 2 }}
+            valueLabelDisplay="on"
+            sx={{
+              mt: 2,
+              "& .MuiSlider-markLabel": {
+                transform: "rotate(45deg)",
+                marginTop: "10px",
+                // textAnchor: "end",
+              },
+            }}
             disableSwap
           />
         </Box>
-      </Box>
+      </Card>
     </Box>
   );
 };
