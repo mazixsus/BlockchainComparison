@@ -22,7 +22,7 @@ const blockchains = [
   // {key: "alephzero", name: "Aleph Zero"},
 ];
 
-export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, setBlockchain, setCumulativeBC }) => {
+export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, dateRange, setBlockchain, setCumulativeBC, setDateRange }) => {
   const [chartData, setChartData] = React.useState(basicTimelineData.tg_growth_index);
 
   const [sliderValue, setSliderValue] = React.useState([0, basicTimelineData.tg_growth_index.dates.length - 1]);
@@ -140,13 +140,13 @@ export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, setBlockcha
       <Box display={"flex"} alignItems={"center"} my={2}>
         <Typography mr={1}>Granularity:</Typography>
         <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel id="blockchain-lebel" size="small">
+          <InputLabel id="granularity-lebel" size="small">
             Choose Granularity
           </InputLabel>
           <Select
             type="text"
             size="small"
-            labelId="blockchain-lebel"
+            labelId="granularity-lebel"
             sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
             value={granularity}
             input={<OutlinedInput label="Choose Granularity" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
@@ -155,6 +155,26 @@ export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, setBlockcha
             <MenuItem value="week">Week</MenuItem>
             <MenuItem value="two_weeks">Two Weeks</MenuItem>
             <MenuItem value="four_weeks">Four Weeks</MenuItem>
+          </Select>
+        </FormControl>
+        <Typography mr={1}>Date Range:</Typography>
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="date-range-lebel" size="small">
+            Choose Date Range
+          </InputLabel>
+          <Select
+            type="text"
+            size="small"
+            labelId="date-range-lebel"
+            sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
+            value={dateRange}
+            input={<OutlinedInput label="Choose Date Range" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
+            onChange={(e) => setDateRange(e.target.value)}
+          >
+            <MenuItem value="last year">Last Year</MenuItem>
+            <MenuItem value="6 months">Last 6 Months</MenuItem>
+            <MenuItem value="3 months">Last 3 Months</MenuItem>
+            
           </Select>
         </FormControl>
       </Box>
@@ -179,7 +199,7 @@ export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, setBlockcha
           fullWidth
           height={300}
           grid={{ vertical: true, horizontal: true }}
-        ></LineChart>
+        />
         <Box px={5} mt={5}>
           <Slider
             value={sliderValue}

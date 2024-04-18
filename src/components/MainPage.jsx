@@ -13,6 +13,7 @@ export const MainPage = () => {
 
   const [blockchain, setBlockchain] = React.useState("near");
   const [cumulativeBC, setCumulativeBC] = React.useState(["fantom"]);
+  const [dateRange, setDateRange] = React.useState("last year");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +22,7 @@ export const MainPage = () => {
 
       const body = JSON.stringify({
         chainName: blockchain, //"near",
-        period: "last year",
+        period: dateRange,//"3 months",
         metric: "tg_growth_index",
         compareWith: cumulativeBC, //["fantom"],
       });
@@ -50,7 +51,7 @@ export const MainPage = () => {
     };
 
     fetchData();
-  }, [blockchain, cumulativeBC]);
+  }, [blockchain, cumulativeBC, dateRange]);
 
   return (
     <div className="flex h-screen p-4">
@@ -82,8 +83,11 @@ export const MainPage = () => {
             basicTimelineData={basicTimelineData}
             blockchain={blockchain}
             cumulativeBC={cumulativeBC}
+            dateRange={dateRange}
+            
             setBlockchain={setBlockchain}
             setCumulativeBC={setCumulativeBC}
+            setDateRange={setDateRange}
           />
         )}
       </Box>
