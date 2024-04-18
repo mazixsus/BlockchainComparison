@@ -77,112 +77,132 @@ export const Chart = ({ basicTimelineData, blockchain, cumulativeBC, dateRange, 
     <Box>
       <Grid container spacing={5} mb={3}>
         <Grid item lg={12} xl={6}>
-          <Box display={"flex"} alignItems={"center"} my={2}>
-            <Typography mr={1}>Blockchain:</Typography>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel id="blockchain-lebel" size="small">
-                Select Blockchain
-              </InputLabel>
-              <Select
-                type="text"
-                size="small"
-                labelId="blockchain-lebel"
-                sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
-                value={blockchain}
-                input={<OutlinedInput label="Add To Comapare" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
-                onChange={(e) => setBlockchain(e.target.value)}
-              >
-                {blockchains.map((blockchain) => {
-                  return (
-                    <MenuItem key={blockchain.key} value={blockchain.key}>
-                      {blockchain.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <Typography mr={1}>Compare With:</Typography>
-            <FormControl sx={{ minWidth: 300 }}>
-              <InputLabel id="compare-with-lebel" size="small">
-                Add to comapare
-              </InputLabel>
-              <Select
-                labelId="compare-with-lebel"
-                size="small"
-                value={cumulativeBC}
-                onChange={(e) => setCumulativeBC(e.target.value)}
-                multiple
-                sx={{ background: "rgba(255, 255, 255, 0.3)" }}
-                input={<OutlinedInput label="Add To Comapare" />}
-                MenuProps={{
-                  anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left",
-                  },
-                  transformOrigin: {
-                    vertical: "top",
-                    horizontal: "left",
-                  },
-                  // getContentAnchorEl: null
-                }}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} size="small" label={blockchains.find((blockchain) => blockchain.key == value).name} />
-                    ))}
-                  </Box>
-                )}
-              >
-                {blockchains.map((blockchain) => {
-                  return (
-                    <MenuItem key={blockchain.key} value={blockchain.key}>
-                      {blockchain.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-          <Box display={"flex"} alignItems={"center"} my={2}>
-            <Typography mr={1}>Granularity:</Typography>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel id="granularity-lebel" size="small">
-                Choose Granularity
-              </InputLabel>
-              <Select
-                type="text"
-                size="small"
-                labelId="granularity-lebel"
-                sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
-                value={granularity}
-                input={<OutlinedInput label="Choose Granularity" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
-                onChange={handleChangeGranularity}
-              >
-                <MenuItem value="week">Week</MenuItem>
-                <MenuItem value="two_weeks">Two Weeks</MenuItem>
-                <MenuItem value="four_weeks">Four Weeks</MenuItem>
-              </Select>
-            </FormControl>
-            <Typography mr={1}>Date Range:</Typography>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel id="date-range-lebel" size="small">
-                Choose Date Range
-              </InputLabel>
-              <Select
-                type="text"
-                size="small"
-                labelId="date-range-lebel"
-                sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
-                value={dateRange}
-                input={<OutlinedInput label="Choose Date Range" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
-                onChange={(e) => setDateRange(e.target.value)}
-              >
-                <MenuItem value="last year">Last Year</MenuItem>
-                <MenuItem value="6 months">Last 6 Months</MenuItem>
-                <MenuItem value="3 months">Last 3 Months</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          <table>
+            <tbody>
+              <tr>
+                <td className="py-5">
+                  <Typography mr={1}>Blockchain:</Typography>
+                </td>
+                <td className="py-5">
+                  <FormControl sx={{ minWidth: 200}}>
+                    <InputLabel id="blockchain-lebel" size="small">
+                      Select Blockchain
+                    </InputLabel>
+                    <Select
+                      type="text"
+                      size="small"
+                      labelId="blockchain-lebel"
+                      sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
+                      value={blockchain}
+                      input={<OutlinedInput label="Add To Comapare" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
+                      onChange={(e) => setBlockchain(e.target.value)}
+                    >
+                      {blockchains.map((blockchain) => {
+                        return (
+                          <MenuItem key={blockchain.key} value={blockchain.key}>
+                            {blockchain.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </td>
+                <td className="py-5">
+                  <Typography mr={1}>Compare With:</Typography>
+                </td>
+                <td className="py-5">
+                  <FormControl sx={{ minWidth: 300 }}>
+                    <InputLabel id="compare-with-lebel" size="small">
+                      Add to comapare
+                    </InputLabel>
+                    <Select
+                      labelId="compare-with-lebel"
+                      size="small"
+                      value={cumulativeBC}
+                      onChange={(e) => setCumulativeBC(e.target.value)}
+                      multiple
+                      sx={{ background: "rgba(255, 255, 255, 0.3)" }}
+                      input={<OutlinedInput label="Add To Comapare" />}
+                      MenuProps={{
+                        anchorOrigin: {
+                          vertical: "bottom",
+                          horizontal: "left",
+                        },
+                        transformOrigin: {
+                          vertical: "top",
+                          horizontal: "left",
+                        },
+                        // getContentAnchorEl: null
+                      }}
+                      renderValue={(selected) => (
+                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                          {selected.map((value) => (
+                            <Chip key={value} size="small" label={blockchains.find((blockchain) => blockchain.key == value).name} />
+                          ))}
+                        </Box>
+                      )}
+                    >
+                      {blockchains.map((blockchain) => {
+                        return (
+                          <MenuItem key={blockchain.key} value={blockchain.key}>
+                            {blockchain.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Typography mr={1}>Granularity:</Typography>
+                </td>
+                <td>
+                  <FormControl sx={{ minWidth: 200 }}>
+                    <InputLabel id="granularity-lebel" size="small">
+                      Choose Granularity
+                    </InputLabel>
+                    <Select
+                      type="text"
+                      size="small"
+                      labelId="granularity-lebel"
+                      sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
+                      value={granularity}
+                      input={<OutlinedInput label="Choose Granularity" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
+                      onChange={handleChangeGranularity}
+                    >
+                      <MenuItem value="week">Week</MenuItem>
+                      <MenuItem value="two_weeks">Two Weeks</MenuItem>
+                      <MenuItem value="four_weeks">Four Weeks</MenuItem>
+                    </Select>
+                  </FormControl>
+                </td>
+                <td>
+                  <Typography mr={1}>Date Range:</Typography>
+                </td>
+                <td>
+                  <FormControl sx={{ minWidth: 200 }}>
+                    <InputLabel id="date-range-lebel" size="small">
+                      Choose Date Range
+                    </InputLabel>
+                    <Select
+                      type="text"
+                      size="small"
+                      labelId="date-range-lebel"
+                      sx={{ mr: 1, background: "rgba(255, 255, 255, 0.3)" }}
+                      value={dateRange}
+                      input={<OutlinedInput label="Choose Date Range" sx={{ background: "rgba(255, 255, 255, 0.3)" }} />}
+                      onChange={(e) => setDateRange(e.target.value)}
+                    >
+                      <MenuItem value="last year">Last Year</MenuItem>
+                      <MenuItem value="6 months">Last 6 Months</MenuItem>
+                      <MenuItem value="3 months">Last 3 Months</MenuItem>
+                    </Select>
+                  </FormControl>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Grid>
         <Grid item sm={12} md={12} lg={12} xl={6}>
           <GaugeCharts chartData={chartData} />
