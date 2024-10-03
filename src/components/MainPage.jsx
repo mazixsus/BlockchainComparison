@@ -4,7 +4,7 @@ import { Chart } from "./Chart";
 import { Box } from "@mui/system";
 import { Divider, Typography } from "@mui/material";
 import { Backdrop, CircularProgress } from "@mui/material";
-import { getAverage, transformDatas } from "../utils/DataHelper";
+import { getAverage, transformDatas } from "../utils/data-helper";
 
 export const MainPage = () => {
   const [basicTimelineData, setBasicTimelineData] = React.useState([]);
@@ -37,11 +37,11 @@ export const MainPage = () => {
       await fetch("/api/basic-timeline-data", requestOptions)
         .then((response) => response.json())
         .then((data) => {
+
           getAverage(data.tokenGuardData.blockchain);
           if (Object.keys(data.tokenGuardData.cumulative).length !== 0) getAverage(data.tokenGuardData.cumulative);
 
           transformDatas(data);
-          console.log(transformDatas(data));
 
           setBasicTimelineData(transformDatas(data));
           setLoading(false);

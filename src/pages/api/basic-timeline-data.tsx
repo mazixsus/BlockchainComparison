@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getDataObject } from "../../utils/api-data-helper";
+import { get } from "http";
 
 const basicTimeLineDataApiRoute = "https://api.tokenguard.io/db-api/growth-index/basic-timeline-data";
 
@@ -15,30 +17,15 @@ type ResponseData = {
         date: string;
         value: number;
       }[];
-    };
+    } | {};
   };
   errorMessage?: string;
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   if (req.method === "POST") {
-    var stringifiedBody = JSON.stringify(req.body);
-
-    return fetch(basicTimeLineDataApiRoute, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: stringifiedBody,
-      redirect: "follow",
-    })
-      .then((response) => response.json())
-      .then((jsonResBody) => {
-        res.status(200).json({ tokenGuardData: jsonResBody });
-      })
-      .catch((error) => {
-        res.status(500).json({ tokenGuardData: {}, errorMessage: "There was an error with the external API request" });
-      });
+    const response = getDataObject(req.body.chainName, req.body.compareWith, req.body.period);
+    return res.status(200).json({ tokenGuardData: response });
   } else {
     res.status(404).json({ errorMessage: "Page not found" });
   }
